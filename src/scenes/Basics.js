@@ -1,3 +1,5 @@
+// 90 degree rotation
+// Clicks reset rotation
 class Basics extends Phaser.Scene {
   constructor() {
     super("basicsScene");
@@ -59,26 +61,41 @@ class Basics extends Phaser.Scene {
     let pearTweenChain = this.tweens.chain({
       targets: verygoodpear,
       loop: 1,
-      paused: false,
+      paused: true,
       tweens: [
         {
+          angle: "+=90",
           x: w - 64,
           duration: 500,
           ease: "Bounce.easeOut",
+
+          /*
+          onComplete: () => {
+            this.instructionText.text = "Hello!";
+          },
+          */
         },
 
         {
+          angle: "+=90",
           y: h - 64,
+          scale: {
+            from: 1,
+            to: 2,
+          },
+
           duration: 1000,
           ease: "Sine.easeOut",
         },
 
         {
+          angle: "+=90",
           x: 64,
           duration: 1000,
         },
 
         {
+          angle: "+=90",
           y: 64,
           duration: 1000,
         },
@@ -87,6 +104,13 @@ class Basics extends Phaser.Scene {
 
     // enable scene reload key
     this.reload = this.input.keyboard.addKey("R");
+
+    // add mouse input listener to start tween chain
+    this.input.on("pointerdown", () => {
+      verygoodpear.setPosition(64, 64);
+      verygoodpear.setRotation(0);
+      pearTweenChain.restart();
+    });
 
     // update instruction text
     document.getElementById("info").innerHTML =
